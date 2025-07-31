@@ -14,8 +14,6 @@ export default function UploadInterface({ onUploadSuccess }: UploadInterfaceProp
   const [error, setError] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const transcriptInputRef = useRef<HTMLInputElement>(null);
-  const notesInputRef = useRef<HTMLInputElement>(null);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -214,7 +212,7 @@ export default function UploadInterface({ onUploadSuccess }: UploadInterfaceProp
           <div>
             <h3 className="text-lg font-medium mb-4">Individual Upload</h3>
             <p className="text-gray-700 mb-6">
-              Drop all files at once - we'll automatically detect the transcript and note files based on their names.
+              Drop all files at once - we&apos;ll automatically detect the transcript and note files based on their names.
             </p>
 
             {/* Drag and Drop Zone */}
@@ -242,7 +240,7 @@ export default function UploadInterface({ onUploadSuccess }: UploadInterfaceProp
                 <p className="text-lg text-gray-700 font-medium">Drop your files here, or click to browse</p>
                 <p className="text-gray-600 mt-2">
                   Include one transcript file and multiple note files<br/>
-                  <span className="text-sm">Files with "transcript" in the name will be detected as transcripts</span>
+                  <span className="text-sm">Files with &quot;transcript&quot; in the name will be detected as transcripts</span>
                 </p>
               </div>
             </div>
