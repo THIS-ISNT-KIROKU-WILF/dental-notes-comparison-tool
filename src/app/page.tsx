@@ -11,13 +11,16 @@ export default function Home() {
   const [isEvaluating, setIsEvaluating] = useState(false);
 
   const handleUploadSuccess = async (result: UploadResponse) => {
+    console.log('Upload success, starting evaluation...', result);
     setUploadResult(result);
     
     // Automatically start evaluation if we have a sessionId or batchId
     if (result.sessionId || result.batchId) {
+      console.log('Starting evaluation for:', result.sessionId ? 'individual' : 'batch');
       setIsEvaluating(true);
       try {
         if (result.batchId && result.structure) {
+          console.log('Making batch evaluation request...');
           // For batch uploads, send structure data to evaluation API
           const evaluationResponse = await fetch('/api/evaluate', {
             method: 'POST',
@@ -34,11 +37,18 @@ export default function Home() {
             }),
           });
           
+          console.log('Batch evaluation response status:', evaluationResponse.status);
           const evaluationData = await evaluationResponse.json();
+          console.log('Batch evaluation data:', evaluationData);
+          
           if (evaluationData.success) {
             setEvaluations(evaluationData.evaluations || []);
+            console.log('Set evaluations:', evaluationData.evaluations?.length || 0);
+          } else {
+            console.error('Evaluation failed:', evaluationData.error);
           }
         } else if (result.sessionId) {
+          console.log('Making individual evaluation request...');
           // For individual uploads, use the GET endpoint
           const evaluationResponse = await fetch(`/api/evaluate?sessionId=${result.sessionId}`);
           const evaluationData = await evaluationResponse.json();
