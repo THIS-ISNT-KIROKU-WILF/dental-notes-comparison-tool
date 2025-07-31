@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { readFile, readdir, stat } from 'fs/promises';
 import { join } from 'path';
 import { evaluateDentalNotes, rankEvaluations } from '@/lib/openai';
-import { EvaluationRequest, Evaluation, EvaluationResults } from '@/types';
+import { EvaluationRequest, Evaluation, EvaluationResults, BatchData } from '@/types';
 
 const UPLOAD_DIR = join(process.cwd(), 'uploads');
 
@@ -274,7 +274,7 @@ async function findNoteFiles(sessionDir: string): Promise<Array<{ name: string; 
 }
 
 // New function for in-memory batch evaluation
-async function evaluateBatchInMemory(batchData: any) {
+async function evaluateBatchInMemory(batchData: BatchData) {
   try {
     console.log('Starting batch evaluation with data:', JSON.stringify(batchData, null, 2));
     const allEvaluations: Evaluation[] = [];
