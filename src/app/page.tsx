@@ -44,10 +44,10 @@ export default function Home() {
         } else {
           console.error('Evaluation failed:', evaluationData.error);
         }
-      } else if ((result as any).data) {
+      } else if (result.data) {
         console.log('Making individual evaluation requests for in-memory data...');
         // For individual uploads with in-memory data, evaluate each note
-        const data = (result as any).data;
+        const data = result.data;
         const allEvaluations: Evaluation[] = [];
         
         for (const note of data.notes) {

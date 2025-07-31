@@ -95,6 +95,11 @@ export interface UploadResponse {
     transcript: string;
     notes: string[];
   };
+  data?: {
+    transcriptName: string;
+    transcriptContent: string;
+    notes: Array<{ name: string; content: string }>;
+  };
   structure?: Record<string, unknown>;
   noteGroups?: Record<string, unknown>;
   summary?: Record<string, unknown>;
