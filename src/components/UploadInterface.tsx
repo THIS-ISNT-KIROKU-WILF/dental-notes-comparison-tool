@@ -176,7 +176,7 @@ export default function UploadInterface({ onUploadSuccess }: UploadInterfaceProp
   };
 
   return (
-    <div className="rounded-lg shadow-lg p-8 border border-white/20" style={{backdropFilter: 'blur(11px)', background: 'rgba(255, 255, 255, 0.3)'}}>
+    <div className="frosted-glass p-8">
       {/* Mode Selection */}
       <div className="mb-8">
         <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
