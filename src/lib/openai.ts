@@ -18,7 +18,7 @@ export async function evaluateDentalNotes({
     const prompt = buildEvaluationPrompt(transcript, notes, noteFileName);
     
     const completion = await openai.chat.completions.create({
-      model: "o3",
+      model: "o3-2025-04-16", // Using o3 with proper model ID
       messages: [
         {
           role: "system",
@@ -66,7 +66,9 @@ export async function evaluateDentalNotes({
 
   } catch (error) {
     console.error('OpenAI evaluation error:', error);
-    throw new Error('Failed to evaluate dental notes');
+    const message = error instanceof Error ? error.message : JSON.stringify(error);
+    console.error('[OpenAI error]', message);
+    throw new Error(`OpenAI-eval-error: ${message}`);
   }
 }
 

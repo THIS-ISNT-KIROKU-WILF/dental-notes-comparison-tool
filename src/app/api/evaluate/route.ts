@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Evaluation error:', error);
     return NextResponse.json(
-      { error: 'Failed to evaluate notes' },
+      { error: (error as Error).message ?? 'Failed to evaluate notes' },
       { status: 500 }
     );
   }
