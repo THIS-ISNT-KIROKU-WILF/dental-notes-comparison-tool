@@ -16,7 +16,10 @@ export async function POST(request: NextRequest) {
       console.log('Processing batch evaluation for batchId:', body.batchId);
       try {
         // For large batches, process in chunks to avoid timeout
-        const totalFiles = Object.values(body.batchData.structure).reduce((sum, group: any) => sum + group.notes.length, 0);
+        const totalFiles = Object.values(body.batchData.structure).reduce((sum, group) => {
+          const typedGroup = group as { transcript: { content: string } | null; notes: Array<{ name: string; content: string }> };
+          return sum + typedGroup.notes.length;
+        }, 0);
         console.log(`Total files to evaluate: ${totalFiles}`);
         
         if (totalFiles > 5) {
