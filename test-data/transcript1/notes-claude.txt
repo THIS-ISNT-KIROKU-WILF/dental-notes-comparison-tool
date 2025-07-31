@@ -1,0 +1,36 @@
+Patient: Sarah Johnson
+Visit Date: March 15, 2025
+Chief Complaint: Routine dental cleaning with cold sensitivity concern
+
+SUBJECTIVE:
+Patient presents for scheduled prophylaxis. Reports cold sensitivity in upper left molar area, duration 2 weeks. Sensitivity occurs only with very cold stimuli, not constant pain.
+
+OBJECTIVE:
+Clinical examination reveals:
+- Generalized plaque deposits, concentrated on posterior molars
+- Localized gingivitis around tooth #14 correlating with sensitivity complaint
+- Incipient carious lesion tooth #18 (upper right wisdom tooth)
+- No other significant pathology noted
+
+ASSESSMENT:
+1. Gingivitis secondary to plaque accumulation
+2. Dentin hypersensitivity tooth #14
+3. Early enamel caries tooth #18
+
+PLAN:
+- Completed ultrasonic scaling and prophylaxis
+- Fluoride treatment applied
+- Patient education provided regarding:
+  * Sensitive teeth management
+  * Improved flossing technique for posterior areas
+  * Use of adjunctive cleaning aids (water flosser, interdental brushes)
+
+RECOMMENDATIONS:
+- Desensitizing toothpaste daily use
+- Temporary avoidance of extreme cold temperatures
+- Enhanced oral hygiene protocol
+- Conservative management of #18 with monitoring
+
+RECALL:
+- Routine prophylaxis: 6 months
+- Caries monitoring: 3 months

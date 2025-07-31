@@ -1,0 +1,37 @@
+PATIENT: Michael Chen
+DATE: March 20, 2025
+PROCEDURE: Composite restoration tooth #30
+
+CHIEF COMPLAINT:
+Sharp pain in lower right tooth with biting pressure, duration 1 week with progressive worsening. Patient reports thermal sensitivity, particularly to hot stimuli.
+
+CLINICAL FINDINGS:
+- Large carious lesion tooth #30 (lower right first molar)
+- Radiographic evidence of dentin involvement
+- No pulpal involvement noted
+- Generalized calculus deposits observed
+
+TREATMENT PROVIDED:
+- Local anesthesia administered
+- Carious tissue excavation tooth #30
+- Composite resin restoration placed in multiple layers
+- Light curing of each increment
+- Occlusal adjustment completed
+
+PROCEDURE NOTES:
+- Cavity deeper than clinically apparent
+- All decay successfully removed without pulpal exposure
+- Patient tolerated procedure well
+- Final restoration properly contoured and adjusted
+
+POST-OPERATIVE INSTRUCTIONS:
+1. Avoid chewing on treated side until numbness subsides (approximately 2 hours)
+2. Gentle brushing for 24 hours
+3. Avoid hard foods for several days
+4. Contact office if unusual pain or sensitivity develops
+
+FOLLOW-UP:
+Routine prophylaxis and examination in 6 months
+
+PROGNOSIS:
+Excellent. Restoration expected to function normally for 7-10 years with proper oral hygiene.

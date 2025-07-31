@@ -1,0 +1,38 @@
+PATIENT: Michael Chen
+DATE: March 20, 2025
+CHIEF COMPLAINT: Acute dental pain, lower right quadrant
+
+HISTORY OF PRESENT ILLNESS:
+One-week history of sharp, localized pain in lower right posterior region. Pain is pressure-sensitive and thermally reactive, particularly to heat. Progressive symptom intensity reported.
+
+CLINICAL EXAMINATION:
+- Visual and radiographic examination reveals extensive carious lesion tooth #30
+- Dentin involvement confirmed radiographically  
+- Pulp vitality preserved
+- Secondary finding: moderate tartar accumulation requiring prophylactic attention
+
+DIAGNOSIS:
+Dental caries tooth #30 with dentin involvement
+
+TREATMENT RENDERED:
+1. Local anesthetic infiltration achieved
+2. Excavation of carious dentin using high-speed handpiece
+3. Cavity preparation refined and cleaned
+4. Composite resin restoration placed using incremental technique
+5. Light polymerization of each layer
+6. Occlusal refinement and polishing
+
+CLINICAL NOTES:
+- Lesion extended deeper than initially assessed
+- Complete caries removal accomplished without pulpal compromise
+- Patient demonstrated excellent cooperation throughout procedure
+- Bite adjustment required for optimal occlusion
+
+POST-OPERATIVE CARE:
+- Avoid mastication on operative side until anesthesia resolves
+- Modified oral hygiene (gentle brushing) for initial 24-hour period
+- Dietary modifications: avoid hard/crunchy foods temporarily
+- Emergency contact protocols provided
+
+RECALL INTERVAL:
+6-month comprehensive examination and prophylaxis recommended

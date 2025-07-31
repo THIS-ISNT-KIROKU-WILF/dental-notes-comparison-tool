@@ -1,0 +1,137 @@
+// Core data types for the dental notes comparison tool
+
+export interface TranscriptSession {
+  sessionId: string;
+  transcriptFile: string;
+  noteFiles: string[];
+  createdAt: Date;
+  evaluations?: Evaluation[];
+}
+
+export interface BatchSession {
+  batchId: string;
+  transcripts: TranscriptData[];
+  noteGroups: NoteGroup[];
+  createdAt: Date;
+  summary?: BatchSummary;
+}
+
+export interface TranscriptData {
+  transcriptDir: string;
+  transcriptFile: string;
+  noteFiles: string[];
+  evaluations?: Evaluation[];
+}
+
+export interface NoteGroup {
+  filename: string;
+  transcriptDirs: string[];
+  averageScores?: {
+    detailScore: number;
+    truthfulnessScore: number;
+    overallRanking: number;
+  };
+}
+
+export interface Evaluation {
+  id: string;
+  transcriptName: string;
+  noteFileName: string;
+  results: EvaluationResults;
+  timestamp: Date;
+}
+
+export interface EvaluationResults {
+  detailScore: {
+    score: number; // 1-10
+    explanation: string;
+    examples: string[];
+  };
+  truthfulnessScore: {
+    score: number; // 1-10
+    explanation: string;
+    examples: string[];
+  };
+  falsehoods: Falsehood[];
+  summary: string;
+  overallRanking: number; // relative ranking within the set
+}
+
+export interface Falsehood {
+  id: string;
+  description: string;
+  severity: 'low' | 'medium' | 'high';
+  location: string; // where in the notes this appears
+  correction: string; // what should it say instead
+}
+
+export interface BatchSummary {
+  transcriptCount: number;
+  uniqueNoteTypes: string[];
+  crossTranscriptComparisons: NoteTypeComparison[];
+  topPerformingNoteType: string;
+  overallInsights: string[];
+}
+
+export interface NoteTypeComparison {
+  noteFileName: string;
+  averageDetailScore: number;
+  averageTruthfulnessScore: number;
+  overallRanking: number;
+  commonFalsehoods: Falsehood[];
+  transcriptCount: number;
+}
+
+// API response types
+export interface UploadResponse {
+  success: boolean;
+  sessionId?: string;
+  batchId?: string;
+  message: string;
+  error?: string;
+  files?: {
+    transcript: string;
+    notes: string[];
+  };
+  structure?: any;
+  noteGroups?: any;
+  summary?: any;
+}
+
+export interface EvaluationRequest {
+  sessionId?: string;
+  batchId?: string;
+  transcriptText: string;
+  noteText: string;
+  noteFileName: string;
+  transcriptName: string;
+}
+
+export interface EvaluationResponse {
+  success: boolean;
+  evaluation?: Evaluation;
+  error?: string;
+}
+
+// OpenAI integration types
+export interface OpenAIEvaluationPrompt {
+  transcript: string;
+  notes: string;
+  noteFileName: string;
+}
+
+export interface OpenAIEvaluationResponse {
+  detailScore: number;
+  detailExplanation: string;
+  detailExamples: string[];
+  truthfulnessScore: number;
+  truthfulnessExplanation: string;
+  truthfulnessExamples: string[];
+  falsehoods: Array<{
+    description: string;
+    severity: 'low' | 'medium' | 'high';
+    location: string;
+    correction: string;
+  }>;
+  summary: string;
+}

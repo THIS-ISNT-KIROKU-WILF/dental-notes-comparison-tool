@@ -1,0 +1,75 @@
+Patient: Michael Chen
+Date: March 20, 2025
+Chief Complaint: Tooth pain and suspected cavity
+
+Dr. Smith: Hello Michael, what brings you in today?
+
+Patient: I've been having sharp pain in my lower right tooth, especially when I bite down on food.
+
+Dr. Smith: How long has this been going on?
+
+Patient: About a week now. It started mild but has gotten worse over the past few days.
+
+Dr. Smith: I see. Any sensitivity to hot or cold?
+
+Patient: Yes, definitely. Hot coffee really sets it off.
+
+Dr. Smith: Let me take a look. I'm going to examine the area and take an X-ray.
+
+[Examination and X-ray]
+
+Dr. Smith: I can see the problem. You have a significant cavity in tooth #30 - that's your lower right first molar. The cavity has reached the dentin layer, which explains the pain and sensitivity.
+
+Patient: Do I need a filling?
+
+Dr. Smith: Yes, we'll need to place a filling today. The good news is that it hasn't reached the nerve yet, so a standard composite filling should take care of it.
+
+Patient: How long will the procedure take?
+
+Dr. Smith: About 45 minutes. I'll numb the area first with a local anesthetic, remove the decay, and then place the white filling material.
+
+[Procedure begins]
+
+Dr. Smith: I'm injecting the local anesthetic now. You'll feel a small pinch.
+
+Patient: That wasn't too bad.
+
+Dr. Smith: Good. I'll give that a few minutes to take effect. In the meantime, let me check your other teeth. I notice some tartar buildup that we should address at your next cleaning.
+
+[After anesthetic takes effect]
+
+Dr. Smith: Can you feel this? [Tests with probe]
+
+Patient: No, it's completely numb.
+
+Dr. Smith: Perfect. I'm now removing the decayed portion of the tooth with a dental drill. You'll hear some noise but shouldn't feel any discomfort.
+
+[Drilling and cleaning]
+
+Dr. Smith: All the decay is removed. The cavity was deeper than it initially appeared on the X-ray, but we caught it before it reached the nerve. Now I'm placing the composite filling material in layers.
+
+Patient: Will this last a long time?
+
+Dr. Smith: With proper care, composite fillings typically last 7-10 years. I'm using a special light to cure each layer of the filling material.
+
+[Filling completion]
+
+Dr. Smith: Almost done. I'm just adjusting the bite to make sure it feels natural when you chew. Bite down gently. How does that feel?
+
+Patient: It feels a bit high.
+
+Dr. Smith: I'll adjust that. [Makes adjustments] Try again.
+
+Patient: That's much better.
+
+Dr. Smith: Perfect. The numbness will wear off in about 2 hours. Avoid chewing on that side until the feeling returns completely.
+
+Patient: Any other care instructions?
+
+Dr. Smith: Keep the area clean, brush gently for the first 24 hours, and avoid very hard foods for a few days. The filling is immediately functional, but it's good to be gentle initially.
+
+Patient: When should I come back?
+
+Dr. Smith: Let's schedule a cleaning and check-up in 6 months. If you experience any unusual pain or sensitivity after the numbness wears off, give us a call.
+
+Patient: Thank you, Doctor. This feels so much better already.

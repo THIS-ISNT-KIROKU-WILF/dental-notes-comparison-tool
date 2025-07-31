@@ -1,0 +1,39 @@
+DENTAL TREATMENT RECORD
+Patient: Michael Chen | Date: March 20, 2025
+
+PROBLEM: Severe tooth pain, lower right side
+
+PATIENT COMPLAINT:
+- Sharp pain when biting down (1 week duration, getting worse)
+- Sensitive to hot drinks like coffee
+- Pain affecting daily activities
+
+DIAGNOSIS:
+Big cavity in tooth #30 (back molar, bottom right). X-ray shows decay went into the deeper tooth layer but didn't reach the nerve yet - lucky!
+
+TREATMENT COMPLETED:
+✓ Gave numbing shot (lidocaine injection)
+✓ Used drill to remove all the rotten part of tooth
+✓ Cavity was bigger than expected but got it all out
+✓ Filled with white composite material (applied in layers)
+✓ Used blue light to harden each layer
+✓ Adjusted bite - had to file down high spots so it felt normal
+
+PATIENT EXPERIENCE:
+- Handled injection well ("wasn't too bad")
+- Completely numb during procedure
+- Said bite felt "much better" after adjustments
+- Very cooperative throughout
+
+AFTER-CARE INSTRUCTIONS:
+🔸 Don't chew on right side for 2 hours until feeling comes back
+🔸 Brush gently for first day
+🔸 No hard/crunchy foods for a few days
+🔸 Call if pain continues after numbness goes away
+
+OTHER NOTES:
+- Noticed tartar buildup during exam - needs cleaning at next visit
+- Filling should last 7-10 years with good care
+- Patient relieved pain is gone
+
+NEXT VISIT: 6 months for cleaning and checkup

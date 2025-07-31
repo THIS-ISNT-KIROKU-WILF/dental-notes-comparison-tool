@@ -1,0 +1,30 @@
+PATIENT: Sarah Johnson
+DATE: March 15, 2025
+PROCEDURE: Routine cleaning and examination
+
+CHIEF COMPLAINT:
+Patient reports sensitivity in upper left molar when consuming cold beverages, ongoing for approximately 2 weeks.
+
+CLINICAL FINDINGS:
+- Plaque accumulation noted along gumline, especially posterior molars
+- Mild gingival inflammation around tooth #14
+- Early stage carious lesion identified on tooth #18 (wisdom tooth)
+- Overall gum health appears satisfactory
+
+TREATMENT PROVIDED:
+- Comprehensive oral prophylaxis using ultrasonic scaling
+- Tooth polishing with fluoride paste application
+- Patient education on proper oral hygiene techniques
+
+RECOMMENDATIONS:
+1. Use sensitive teeth toothpaste
+2. Avoid cold beverages for one week
+3. Implement water flosser or interdental brushes for tooth #14 area
+4. Monitor tooth #18 cavity with enhanced oral hygiene
+
+FOLLOW-UP:
+- Next routine cleaning: 6 months
+- Cavity monitoring appointment: 3 months
+
+PROGNOSIS:
+Excellent with proper home care. Sensitivity expected to resolve within several days.

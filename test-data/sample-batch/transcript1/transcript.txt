@@ -1,0 +1,49 @@
+Patient: Sarah Johnson
+Date: March 15, 2025
+Chief Complaint: Routine cleaning and check-up
+
+Dr. Smith: Good morning, Sarah. How are you feeling today?
+
+Patient: I'm doing well, thank you. I've been having some sensitivity in my upper left molar when I drink cold beverages.
+
+Dr. Smith: I see. When did you first notice this sensitivity?
+
+Patient: About two weeks ago. It's not constant, just when I have something very cold.
+
+Dr. Smith: Alright, let's take a look. I'm going to examine your teeth and gums first. 
+
+[Examination begins]
+
+Dr. Smith: I can see some plaque buildup along the gumline, particularly on your back molars. Your gums look healthy overall, but there's some mild inflammation around tooth #14. That's likely causing the sensitivity you mentioned.
+
+Patient: Is that serious?
+
+Dr. Smith: No, it's quite common. We'll do a thorough cleaning today, and I'll show you some techniques to better clean that area. I can also see a small cavity forming on tooth #18 - your wisdom tooth. It's very early stage.
+
+Patient: Do I need a filling?
+
+Dr. Smith: Not immediately, but we should monitor it closely. If you maintain excellent oral hygiene, it might not progress further. Let's schedule a follow-up in 3 months to check on it.
+
+[Cleaning procedure]
+
+Dr. Smith: I'm using an ultrasonic scaler to remove the tartar buildup. You might feel some vibration and hear a buzzing sound.
+
+Patient: That tickles a bit.
+
+Dr. Smith: That's normal. Now I'm polishing your teeth with a fluoride paste. This will help strengthen your enamel and reduce sensitivity.
+
+[Post-cleaning examination]
+
+Dr. Smith: Everything looks much better now. The sensitivity should improve within a few days. I recommend using a toothpaste for sensitive teeth and avoiding very cold drinks for the next week.
+
+Patient: Should I be flossing differently?
+
+Dr. Smith: Yes, let me show you. For the area around tooth #14, try using a water flosser or interdental brushes. The regular floss isn't reaching that spot effectively.
+
+Patient: Thank you, Doctor. When should I come back?
+
+Dr. Smith: Let's schedule your next cleaning in 6 months, and that check-up for the cavity in 3 months as I mentioned.
+
+Patient: Perfect. Thank you for explaining everything so clearly.
+
+Dr. Smith: You're welcome, Sarah. Keep up the good brushing habits!
