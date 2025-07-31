@@ -274,6 +274,9 @@ function EvaluationCard({ evaluation }: { evaluation: Evaluation }) {
         <h5 className="font-medium text-gray-900 mb-2">AI Summary</h5>
         <p className="text-sm text-gray-700">{evaluation.results.summary}</p>
       </div>
+
+      {/* Content Toggle */}
+      <ContentToggle evaluation={evaluation} />
     </div>
   );
 }
