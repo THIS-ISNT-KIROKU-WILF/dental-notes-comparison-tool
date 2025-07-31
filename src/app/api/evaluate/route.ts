@@ -22,8 +22,20 @@ export async function POST(request: NextRequest) {
         }, 0);
         console.log(`Total files to evaluate: ${totalFiles}`);
         
-        if (totalFiles > 5) {
-          // For large batches, process in smaller chunks
+        if (totalFiles > 20) {
+          // For very large batches, process only the first batch and return partial results
+          console.log(`Very large batch detected (${totalFiles} files). Processing first 10 files only.`);
+          const partialResults = await evaluatePartialBatch(body.batchData, 10);
+          return NextResponse.json({
+            success: true,
+            evaluations: partialResults,
+            isPartial: true,
+            totalFiles,
+            processedFiles: partialResults.length,
+            message: `Processed first ${partialResults.length} of ${totalFiles} files due to size limits. Use individual upload for complete analysis.`
+          });
+        } else if (totalFiles > 5) {
+          // For medium batches, process in smaller chunks
           const batchResults = await evaluateBatchInChunks(body.batchData, 3); // Process 3 files at a time
           return NextResponse.json({
             success: true,
@@ -290,6 +302,92 @@ async function findNoteFiles(sessionDir: string): Promise<Array<{ name: string; 
       name: file,
       path: join(sessionDir, file)
     }));
+}
+
+// Partial batch evaluation for very large batches - processes only first N files
+async function evaluatePartialBatch(batchData: BatchData, maxFiles: number = 10) {
+  try {
+    console.log(`Starting partial batch evaluation (max ${maxFiles} files)`);
+    const allEvaluations: Evaluation[] = [];
+    let filesProcessed = 0;
+
+    // Process only the first few transcript groups
+    for (const [transcriptName, transcriptGroup] of Object.entries(batchData.structure)) {
+      if (filesProcessed >= maxFiles) break;
+      
+      const group = transcriptGroup as { transcript: { content: string } | null; notes: Array<{ name: string; content: string }> };
+      
+      if (!group.transcript) {
+        console.warn(`No transcript found for ${transcriptName}, skipping...`);
+        continue;
+      }
+
+      const transcriptContent = group.transcript.content;
+      console.log(`Processing ${transcriptName} with ${group.notes.length} note files`);
+      
+      // Process note files for this transcript (but respect the limit)
+      for (const noteFile of group.notes) {
+        if (filesProcessed >= maxFiles) break;
+        
+        try {
+          console.log(`Evaluating ${noteFile.name} for ${transcriptName} (${filesProcessed + 1}/${maxFiles})`);
+          const results = await evaluateDentalNotes({
+            transcript: transcriptContent,
+            notes: noteFile.content,
+            noteFileName: noteFile.name
+          });
+          
+          const evaluation: Evaluation = {
+            id: `eval_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            transcriptName,
+            noteFileName: noteFile.name,
+            results,
+            timestamp: new Date(),
+            noteContent: noteFile.content,
+            transcriptContent: transcriptContent
+          };
+          
+          allEvaluations.push(evaluation);
+          filesProcessed++;
+          console.log(`Completed evaluation ${filesProcessed}/${maxFiles}`);
+          
+          // Minimal delay for rate limiting
+          await new Promise(resolve => setTimeout(resolve, 100));
+        } catch (error) {
+          console.error(`Error evaluating ${noteFile.name} for ${transcriptName}:`, error);
+          continue;
+        }
+      }
+    }
+
+    // Apply basic ranking to processed evaluations
+    const evaluationsByTranscript = new Map<string, Evaluation[]>();
+    allEvaluations.forEach(evaluation => {
+      const key = evaluation.transcriptName;
+      if (!evaluationsByTranscript.has(key)) {
+        evaluationsByTranscript.set(key, []);
+      }
+      evaluationsByTranscript.get(key)!.push(evaluation);
+    });
+
+    // Apply rankings within each group
+    evaluationsByTranscript.forEach((evaluations) => {
+      const results = evaluations.map(e => e.results);
+      const rankedResults = rankEvaluations(results);
+      
+      evaluations.forEach((evaluation, index) => {
+        evaluation.results = rankedResults[index];
+      });
+    });
+
+    console.log(`Partial batch evaluation completed: ${allEvaluations.length} evaluations`);
+    return allEvaluations;
+  } catch (error) {
+    console.error('Partial batch evaluation error:', error);
+    throw new Error('Failed to evaluate partial batch: ' + 
+      (error instanceof Error ? error.message : 'Unknown error')
+    );
+  }
 }
 
 // Chunked batch evaluation for large batches to avoid timeout

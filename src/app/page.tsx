@@ -41,6 +41,12 @@ export default function Home() {
         if (evaluationData.success) {
           setEvaluations(evaluationData.evaluations || []);
           console.log('Set evaluations:', evaluationData.evaluations?.length || 0);
+          
+          // Handle partial results for very large batches
+          if (evaluationData.isPartial) {
+            console.warn('Partial results due to large batch size:', evaluationData.message);
+            alert(`Large Batch Notice: ${evaluationData.message}\n\nProcessed: ${evaluationData.processedFiles}/${evaluationData.totalFiles} files\n\nFor complete analysis of all ${evaluationData.totalFiles} files, please upload smaller batches or use individual upload.`);
+          }
         } else {
           console.error('Evaluation failed:', evaluationData.error);
         }
