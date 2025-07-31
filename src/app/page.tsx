@@ -14,54 +14,82 @@ export default function Home() {
     console.log('Upload success, starting evaluation...', result);
     setUploadResult(result);
     
-    // Automatically start evaluation if we have a sessionId or batchId
-    if (result.sessionId || result.batchId) {
-      console.log('Starting evaluation for:', result.sessionId ? 'individual' : 'batch');
-      setIsEvaluating(true);
-      try {
-        if (result.batchId && result.structure) {
-          console.log('Making batch evaluation request...');
-          // For batch uploads, send structure data to evaluation API
+    setIsEvaluating(true);
+    try {
+      if (result.batchId && result.structure) {
+        console.log('Making batch evaluation request...');
+        // For batch uploads, send structure data to evaluation API
+        const evaluationResponse = await fetch('/api/evaluate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            batchId: result.batchId,
+            batchData: result,
+            transcriptText: '', // Not used for batch
+            noteText: '', // Not used for batch
+            noteFileName: '', // Not used for batch
+            transcriptName: '' // Not used for batch
+          }),
+        });
+        
+        console.log('Batch evaluation response status:', evaluationResponse.status);
+        const evaluationData = await evaluationResponse.json();
+        console.log('Batch evaluation data:', evaluationData);
+        
+        if (evaluationData.success) {
+          setEvaluations(evaluationData.evaluations || []);
+          console.log('Set evaluations:', evaluationData.evaluations?.length || 0);
+        } else {
+          console.error('Evaluation failed:', evaluationData.error);
+        }
+      } else if ((result as any).data) {
+        console.log('Making individual evaluation requests for in-memory data...');
+        // For individual uploads with in-memory data, evaluate each note
+        const data = (result as any).data;
+        const allEvaluations: Evaluation[] = [];
+        
+        for (const note of data.notes) {
+          console.log(`Evaluating ${note.name}...`);
           const evaluationResponse = await fetch('/api/evaluate', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              batchId: result.batchId,
-              batchData: result,
-              transcriptText: '', // Not used for batch
-              noteText: '', // Not used for batch
-              noteFileName: '', // Not used for batch
-              transcriptName: '' // Not used for batch
+              transcriptText: data.transcriptContent,
+              noteText: note.content,
+              noteFileName: note.name,
+              transcriptName: data.transcriptName
             }),
           });
           
-          console.log('Batch evaluation response status:', evaluationResponse.status);
           const evaluationData = await evaluationResponse.json();
-          console.log('Batch evaluation data:', evaluationData);
           
-          if (evaluationData.success) {
-            setEvaluations(evaluationData.evaluations || []);
-            console.log('Set evaluations:', evaluationData.evaluations?.length || 0);
+          if (evaluationData.success && evaluationData.evaluation) {
+            allEvaluations.push(evaluationData.evaluation);
           } else {
-            console.error('Evaluation failed:', evaluationData.error);
-          }
-        } else if (result.sessionId) {
-          console.log('Making individual evaluation request...');
-          // For individual uploads, use the GET endpoint
-          const evaluationResponse = await fetch(`/api/evaluate?sessionId=${result.sessionId}`);
-          const evaluationData = await evaluationResponse.json();
-          
-          if (evaluationData.success) {
-            setEvaluations(evaluationData.evaluations || []);
+            console.error(`Evaluation failed for ${note.name}:`, evaluationData.error);
           }
         }
-      } catch (error) {
-        console.error('Failed to get evaluations:', error);
-      } finally {
-        setIsEvaluating(false);
+        
+        setEvaluations(allEvaluations);
+        console.log('Set evaluations:', allEvaluations.length);
+      } else if (result.sessionId) {
+        console.log('Making individual evaluation request...');
+        // For legacy file-based individual uploads, use the GET endpoint
+        const evaluationResponse = await fetch(`/api/evaluate?sessionId=${result.sessionId}`);
+        const evaluationData = await evaluationResponse.json();
+        
+        if (evaluationData.success) {
+          setEvaluations(evaluationData.evaluations || []);
+        }
       }
+    } catch (error) {
+      console.error('Failed to get evaluations:', error);
+    } finally {
+      setIsEvaluating(false);
     }
   };
 

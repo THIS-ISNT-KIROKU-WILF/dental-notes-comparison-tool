@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
-import { existsSync } from 'fs';
 
-const UPLOAD_DIR = join(process.cwd(), 'uploads');
 const ALLOWED_TYPES = [
   'text/plain',
   'application/pdf', 
@@ -67,52 +63,35 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Create upload directory if it doesn't exist
-    if (!existsSync(UPLOAD_DIR)) {
-      await mkdir(UPLOAD_DIR, { recursive: true });
-    }
+    // Process files in memory instead of saving to disk
+    console.log('Processing files in memory...');
+    
+    // Read transcript content
+    const transcriptText = await transcript.text();
+    console.log('Transcript processed:', transcriptText.length, 'characters');
 
-    // Create session directory
-    const sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    const sessionDir = join(UPLOAD_DIR, sessionId);
-    await mkdir(sessionDir, { recursive: true });
-
-    // Save files
-    console.log('Starting file save process...');
-    const savedFiles = {
-      transcript: '',
-      notes: [] as string[]
-    };
-
-    // Save transcript
-    console.log('Saving transcript file...');
-    const transcriptBuffer = Buffer.from(await transcript.arrayBuffer());
-    const transcriptPath = join(sessionDir, `transcript.${getFileExtension(transcript.name)}`);
-    await writeFile(transcriptPath, transcriptBuffer);
-    savedFiles.transcript = transcriptPath;
-    console.log('Transcript saved to:', transcriptPath);
-
-    // Save note files
-    console.log('Saving note files...');
+    // Read note files content
+    const noteContents = [];
     for (let i = 0; i < notes.length; i++) {
       const note = notes[i];
-      console.log(`Saving note file ${i + 1}/${notes.length}: ${note.name}`);
-      const noteBuffer = Buffer.from(await note.arrayBuffer());
-      const notePath = join(sessionDir, note.name);
-      await writeFile(notePath, noteBuffer);
-      savedFiles.notes.push(notePath);
-      console.log(`Note file saved to: ${notePath}`);
+      console.log(`Processing note file ${i + 1}/${notes.length}: ${note.name}`);
+      const noteText = await note.text();
+      noteContents.push({
+        name: note.name,
+        content: noteText
+      });
+      console.log(`Note file processed: ${note.name}, ${noteText.length} characters`);
     }
 
-    console.log('All files saved successfully, returning response');
+    console.log('All files processed in memory, returning data for evaluation');
 
     return NextResponse.json({
       success: true,
-      sessionId,
-      message: 'Files uploaded successfully',
-      files: {
-        transcript: transcript.name,
-        notes: notes.map(note => note.name)
+      message: 'Files processed successfully',
+      data: {
+        transcriptName: transcript.name,
+        transcriptContent: transcriptText,
+        notes: noteContents
       }
     });
 
@@ -129,6 +108,3 @@ export async function POST(request: NextRequest) {
   }
 }
 
-function getFileExtension(filename: string): string {
-  return filename.split('.').pop() || 'txt';
-}
