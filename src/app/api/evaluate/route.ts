@@ -11,8 +11,8 @@ export async function POST(request: NextRequest) {
     const body: EvaluationRequest = await request.json();
     const { transcriptText, noteText, noteFileName, transcriptName } = body;
 
-    // Validation
-    if (!transcriptText || !noteText || !noteFileName || !transcriptName) {
+    // Validation - skip for batch requests
+    if (!body.batchId && (!transcriptText || !noteText || !noteFileName || !transcriptName)) {
       return NextResponse.json(
         { error: 'Missing required fields: transcriptText, noteText, noteFileName, transcriptName' },
         { status: 400 }
