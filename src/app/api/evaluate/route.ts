@@ -9,10 +9,31 @@ const UPLOAD_DIR = join(process.cwd(), 'uploads');
 export async function POST(request: NextRequest) {
   try {
     const body: EvaluationRequest = await request.json();
+    console.log('Received evaluation request:', { hasBatchId: !!body.batchId, hasBatchData: !!body.batchData });
+
+    // Handle batch evaluation
+    if (body.batchId && body.batchData) {
+      console.log('Processing batch evaluation for batchId:', body.batchId);
+      try {
+        const batchResults = await evaluateBatchInMemory(body.batchData);
+        return NextResponse.json({
+          success: true,
+          evaluations: batchResults
+        });
+      } catch (error) {
+        console.error('Batch evaluation failed:', error);
+        return NextResponse.json(
+          { error: 'Batch evaluation failed: ' + (error instanceof Error ? error.message : 'Unknown error') },
+          { status: 500 }
+        );
+      }
+    }
+
+    // Handle individual evaluation
     const { transcriptText, noteText, noteFileName, transcriptName } = body;
 
-    // Validation - skip for batch requests
-    if (!body.batchId && (!transcriptText || !noteText || !noteFileName || !transcriptName)) {
+    // Validation for individual requests
+    if (!transcriptText || !noteText || !noteFileName || !transcriptName) {
       return NextResponse.json(
         { error: 'Missing required fields: transcriptText, noteText, noteFileName, transcriptName' },
         { status: 400 }
