@@ -42,11 +42,8 @@ export default function UploadInterface({ onUploadSuccess }: UploadInterfaceProp
   };
 
   const handleIndividualUpload = async () => {
-    const transcriptFile = transcriptInputRef.current?.files?.[0];
-    const noteFiles = notesInputRef.current?.files;
-
-    if (!transcriptFile || !noteFiles || noteFiles.length === 0) {
-      setError('Please select a transcript file and at least one note file');
+    if (!transcriptFile || noteFiles.length === 0) {
+      setError('Please provide both transcript and note files');
       return;
     }
 
@@ -57,7 +54,7 @@ export default function UploadInterface({ onUploadSuccess }: UploadInterfaceProp
       const formData = new FormData();
       formData.append('transcript', transcriptFile);
       
-      Array.from(noteFiles).forEach(file => {
+      noteFiles.forEach(file => {
         formData.append('notes', file);
       });
 
