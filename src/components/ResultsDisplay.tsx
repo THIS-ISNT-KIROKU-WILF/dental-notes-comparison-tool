@@ -77,7 +77,7 @@ function ContentToggle({ evaluation }: { evaluation: Evaluation }) {
 export default function ResultsDisplay({ evaluations }: ResultsDisplayProps) {
   if (evaluations.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow-lg p-8 text-center">
+      <div className="bg-white/80 backdrop-blur-md rounded-lg shadow-lg p-8 text-center border border-white/20">
         <p className="text-gray-700">No evaluations available yet.</p>
       </div>
     );
@@ -94,7 +94,7 @@ export default function ResultsDisplay({ evaluations }: ResultsDisplayProps) {
   return (
     <div className="space-y-8">
       {/* Summary Statistics */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
+      <div className="bg-white/80 backdrop-blur-md rounded-lg shadow-lg p-6 border border-white/20">
         <h3 className="text-xl font-semibold mb-4">Evaluation Summary</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-blue-50 p-4 rounded-md">
@@ -168,7 +168,7 @@ export default function ResultsDisplay({ evaluations }: ResultsDisplayProps) {
 
 function EvaluationCard({ evaluation }: { evaluation: Evaluation }) {
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
+    <div className="bg-white/80 backdrop-blur-md rounded-lg shadow-lg p-6 border border-white/20">
       <div className="flex justify-between items-start mb-4">
         <div>
           <h4 className="text-lg font-semibold">{evaluation.noteFileName}</h4>
