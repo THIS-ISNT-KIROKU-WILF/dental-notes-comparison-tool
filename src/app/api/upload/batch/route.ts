@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir, readdir } from 'fs/promises';
+import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
-import { existsSync } from 'fs';
+import { existsSync, createWriteStream } from 'fs';
 import yauzl from 'yauzl';
-import { promisify } from 'util';
 
 const UPLOAD_DIR = join(process.cwd(), 'uploads');
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB for ZIP files
@@ -150,7 +149,7 @@ async function extractZipFile(zipPath: string, extractDir: string): Promise<Extr
           await mkdir(extractPath, { recursive: true });
           
           const filePath = join(extractPath, fileName);
-          const writeStream = require('fs').createWriteStream(filePath);
+          const writeStream = createWriteStream(filePath);
 
           readStream.pipe(writeStream);
 

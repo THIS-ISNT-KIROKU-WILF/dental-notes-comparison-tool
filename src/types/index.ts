@@ -93,9 +93,9 @@ export interface UploadResponse {
     transcript: string;
     notes: string[];
   };
-  structure?: any;
-  noteGroups?: any;
-  summary?: any;
+  structure?: Record<string, unknown>;
+  noteGroups?: Record<string, unknown>;
+  summary?: Record<string, unknown>;
 }
 
 export interface EvaluationRequest {

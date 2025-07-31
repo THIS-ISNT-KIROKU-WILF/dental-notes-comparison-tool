@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { OpenAIEvaluationPrompt, OpenAIEvaluationResponse, EvaluationResults, Falsehood } from '@/types';
+import { OpenAIEvaluationPrompt, OpenAIEvaluationResponse, EvaluationResults } from '@/types';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,

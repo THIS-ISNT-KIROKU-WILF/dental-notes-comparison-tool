@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readFile } from 'fs/promises';
+import { readFile, readdir, stat } from 'fs/promises';
 import { join } from 'path';
 import { evaluateDentalNotes, rankEvaluations } from '@/lib/openai';
 import { EvaluationRequest, Evaluation, EvaluationResults } from '@/types';
@@ -9,7 +9,7 @@ const UPLOAD_DIR = join(process.cwd(), 'uploads');
 export async function POST(request: NextRequest) {
   try {
     const body: EvaluationRequest = await request.json();
-    const { sessionId, transcriptText, noteText, noteFileName, transcriptName } = body;
+    const { transcriptText, noteText, noteFileName, transcriptName } = body;
 
     // Validation
     if (!transcriptText || !noteText || !noteFileName || !transcriptName) {
@@ -130,7 +130,7 @@ async function evaluateSession(sessionId: string) {
 async function evaluateBatch(batchId: string) {
   try {
     const batchDir = join(UPLOAD_DIR, batchId);
-    const { readdir, stat } = require('fs/promises');
+
     
     // Get all transcript directories
     const entries = await readdir(batchDir);
@@ -229,7 +229,6 @@ async function evaluateBatch(batchId: string) {
 
 // Helper functions
 async function findTranscriptFile(sessionDir: string): Promise<string> {
-  const { readdir } = require('fs/promises');
   const files = await readdir(sessionDir);
   
   for (const file of files) {
@@ -242,7 +241,6 @@ async function findTranscriptFile(sessionDir: string): Promise<string> {
 }
 
 async function findNoteFiles(sessionDir: string): Promise<Array<{ name: string; path: string }>> {
-  const { readdir } = require('fs/promises');
   const files = await readdir(sessionDir);
   
   return files

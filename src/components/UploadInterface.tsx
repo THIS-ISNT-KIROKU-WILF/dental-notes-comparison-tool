@@ -73,7 +73,7 @@ export default function UploadInterface({ onUploadSuccess }: UploadInterfaceProp
       } else {
         setError(result.error || 'Upload failed');
       }
-    } catch (error) {
+          } catch {
       setError('Network error during upload');
     } finally {
       setIsUploading(false);
@@ -113,7 +113,7 @@ export default function UploadInterface({ onUploadSuccess }: UploadInterfaceProp
       } else {
         setError(result.error || 'Upload failed');
       }
-    } catch (error) {
+          } catch {
       setError('Network error during upload');
     } finally {
       setIsUploading(false);
