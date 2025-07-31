@@ -82,6 +82,48 @@ export default function UploadInterface({ onUploadSuccess }: UploadInterfaceProp
     }
   };
 
+  // Auto-detect transcript and note files based on naming convention
+  const detectFileTypes = (files: File[]) => {
+    const transcript = files.find(file => 
+      file.name.toLowerCase().includes('transcript')
+    );
+    
+    const notes = files.filter(file => 
+      !file.name.toLowerCase().includes('transcript') &&
+      (file.name.endsWith('.txt') || file.name.endsWith('.md'))
+    );
+
+    return { transcript, notes };
+  };
+
+  const handleIndividualDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const files = Array.from(e.dataTransfer.files);
+    handleIndividualFileSelect(files);
+  };
+
+  const handleIndividualFileSelect = (files: File[]) => {
+    const { transcript, notes } = detectFileTypes(files);
+    
+    if (transcript) {
+      setTranscriptFile(transcript);
+    }
+    
+    if (notes.length > 0) {
+      setNoteFiles(notes);
+    }
+
+    if (!transcript && notes.length === 0) {
+      setError('No valid files detected. Please include files with "transcript" in the name and note files.');
+    } else if (!transcript) {
+      setError('No transcript file detected. Please include a file with "transcript" in the name.');
+    } else if (notes.length === 0) {
+      setError('No note files detected. Please include .txt or .md files (not containing "transcript").');
+    } else {
+      setError(null);
+    }
+  };
+
   const handleBatchUpload = async (files?: File[]) => {
     let zipFile: File | undefined;
 
