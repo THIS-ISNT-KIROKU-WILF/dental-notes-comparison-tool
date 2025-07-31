@@ -98,10 +98,20 @@ export interface UploadResponse {
   summary?: Record<string, unknown>;
 }
 
+export interface BatchData {
+  batchId: string;
+  structure: Record<string, {
+    transcript: { content: string } | null;
+    notes: Array<{ name: string; content: string }>;
+  }>;
+  noteGroups: Record<string, number>;
+  summary: Record<string, unknown>;
+}
+
 export interface EvaluationRequest {
   sessionId?: string;
   batchId?: string;
-  batchData?: any; // For in-memory batch processing
+  batchData?: BatchData; // For in-memory batch processing
   transcriptText: string;
   noteText: string;
   noteFileName: string;

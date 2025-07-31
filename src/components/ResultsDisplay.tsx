@@ -8,7 +8,7 @@ interface ResultsDisplayProps {
   evaluations: Evaluation[];
 }
 
-export default function ResultsDisplay({ uploadResult, evaluations }: ResultsDisplayProps) {
+export default function ResultsDisplay({ evaluations }: ResultsDisplayProps) {
   if (evaluations.length === 0) {
     return (
       <div className="bg-white rounded-lg shadow-lg p-8 text-center">
