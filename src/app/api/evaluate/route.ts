@@ -11,15 +11,29 @@ export async function POST(request: NextRequest) {
     const body: EvaluationRequest = await request.json();
     console.log('Received evaluation request:', { hasBatchId: !!body.batchId, hasBatchData: !!body.batchData });
 
-    // Handle batch evaluation
+    // Handle batch evaluation with chunked processing
     if (body.batchId && body.batchData) {
       console.log('Processing batch evaluation for batchId:', body.batchId);
       try {
-        const batchResults = await evaluateBatchInMemory(body.batchData);
-        return NextResponse.json({
-          success: true,
-          evaluations: batchResults
-        });
+        // For large batches, process in chunks to avoid timeout
+        const totalFiles = Object.values(body.batchData.structure).reduce((sum, group: any) => sum + group.notes.length, 0);
+        console.log(`Total files to evaluate: ${totalFiles}`);
+        
+        if (totalFiles > 10) {
+          // For large batches, process in smaller chunks
+          const batchResults = await evaluateBatchInChunks(body.batchData, 5); // Process 5 files at a time
+          return NextResponse.json({
+            success: true,
+            evaluations: batchResults
+          });
+        } else {
+          // For smaller batches, use the original method
+          const batchResults = await evaluateBatchInMemory(body.batchData);
+          return NextResponse.json({
+            success: true,
+            evaluations: batchResults
+          });
+        }
       } catch (error) {
         console.error('Batch evaluation failed:', error);
         return NextResponse.json(

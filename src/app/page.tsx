@@ -102,7 +102,7 @@ export default function Home() {
   return (
     <main className="min-h-screen relative">
 
-      <div className="container mx-auto px-4 py-8 relative z-10 frosted-glass">
+      <div className="container mx-auto px-4 py-8 relative z-10 light-frosting">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Dental Notes Comparison Tool
