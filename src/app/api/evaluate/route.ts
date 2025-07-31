@@ -272,3 +272,70 @@ async function findNoteFiles(sessionDir: string): Promise<Array<{ name: string; 
       path: join(sessionDir, file)
     }));
 }
+
+// New function for in-memory batch evaluation
+async function evaluateBatchInMemory(batchData: any) {
+  try {
+    console.log('Starting batch evaluation with data:', JSON.stringify(batchData, null, 2));
+    const allEvaluations: Evaluation[] = [];
+
+    // Process each transcript group from the in-memory structure
+    for (const [transcriptName, transcriptGroup] of Object.entries(batchData.structure)) {
+      console.log(`Processing transcript: ${transcriptName}`);
+      const group = transcriptGroup as { transcript: { content: string } | null; notes: Array<{ name: string; content: string }> };
+      
+      if (!group.transcript) {
+        console.warn(`No transcript found for ${transcriptName}, skipping...`);
+        continue;
+      }
+
+      const transcriptContent = group.transcript.content;
+      console.log(`Found transcript content (${transcriptContent.length} chars) and ${group.notes.length} note files`);
+      
+      // Evaluate each note file against the transcript
+      for (const noteFile of group.notes) {
+        try {
+          console.log(`Evaluating ${noteFile.name} for ${transcriptName}...`);
+          const evaluation = await evaluateDentalNotes(
+            transcriptContent,
+            noteFile.content,
+            noteFile.name,
+            transcriptName
+          );
+          
+          allEvaluations.push(evaluation);
+          console.log(`Completed evaluation for ${noteFile.name}, total evaluations: ${allEvaluations.length}`);
+          
+          // Rate limiting delay
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        } catch (error) {
+          console.error(`Error evaluating ${noteFile.name} for ${transcriptName}:`, error);
+          continue;
+        }
+      }
+    }
+
+    // Rank evaluations within each transcript group
+    const evaluationsByTranscript = new Map<string, Evaluation[]>();
+    allEvaluations.forEach(evaluation => {
+      const key = evaluation.transcriptName;
+      if (!evaluationsByTranscript.has(key)) {
+        evaluationsByTranscript.set(key, []);
+      }
+      evaluationsByTranscript.get(key)!.push(evaluation);
+    });
+
+    // Apply rankings within each group
+    evaluationsByTranscript.forEach((evaluations) => {
+      rankEvaluations(evaluations);
+    });
+
+    console.log(`Batch evaluation completed with ${allEvaluations.length} total evaluations`);
+    return allEvaluations;
+  } catch (error) {
+    console.error('Batch evaluation error:', error);
+    throw new Error('Failed to evaluate batch: ' + 
+      (error instanceof Error ? error.message : 'Unknown error')
+    );
+  }
+}
