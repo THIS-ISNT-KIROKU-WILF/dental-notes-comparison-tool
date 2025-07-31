@@ -101,6 +101,7 @@ export interface UploadResponse {
 export interface EvaluationRequest {
   sessionId?: string;
   batchId?: string;
+  batchData?: any; // For in-memory batch processing
   transcriptText: string;
   noteText: string;
   noteFileName: string;

@@ -17,11 +17,35 @@ export default function Home() {
     if (result.sessionId || result.batchId) {
       setIsEvaluating(true);
       try {
-        const evaluationResponse = await fetch(`/api/evaluate?${result.sessionId ? `sessionId=${result.sessionId}` : `batchId=${result.batchId}`}`);
-        const evaluationData = await evaluationResponse.json();
-        
-        if (evaluationData.success) {
-          setEvaluations(evaluationData.evaluations || []);
+        if (result.batchId && result.structure) {
+          // For batch uploads, send structure data to evaluation API
+          const evaluationResponse = await fetch('/api/evaluate', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              batchId: result.batchId,
+              batchData: result,
+              transcriptText: '', // Not used for batch
+              noteText: '', // Not used for batch
+              noteFileName: '', // Not used for batch
+              transcriptName: '' // Not used for batch
+            }),
+          });
+          
+          const evaluationData = await evaluationResponse.json();
+          if (evaluationData.success) {
+            setEvaluations(evaluationData.evaluations || []);
+          }
+        } else if (result.sessionId) {
+          // For individual uploads, use the GET endpoint
+          const evaluationResponse = await fetch(`/api/evaluate?sessionId=${result.sessionId}`);
+          const evaluationData = await evaluationResponse.json();
+          
+          if (evaluationData.success) {
+            setEvaluations(evaluationData.evaluations || []);
+          }
         }
       } catch (error) {
         console.error('Failed to get evaluations:', error);
