@@ -71,10 +71,12 @@ export default function UploadInterface({ onUploadSuccess }: UploadInterfaceProp
       if (result.success) {
         onUploadSuccess(result);
       } else {
+        console.error('Individual upload unsuccessful:', result.error);
         setError(result.error || 'Upload failed');
       }
-          } catch {
-      setError('Network error during upload');
+    } catch (error) {
+      console.error('Network error during individual upload:', error);
+      setError(`Network error: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsUploading(false);
     }
@@ -98,6 +100,8 @@ export default function UploadInterface({ onUploadSuccess }: UploadInterfaceProp
     setError(null);
 
     try {
+      console.log('Starting batch upload...', { fileName: zipFile.name, size: zipFile.size });
+      
       const formData = new FormData();
       formData.append('zipFile', zipFile);
 
@@ -106,15 +110,27 @@ export default function UploadInterface({ onUploadSuccess }: UploadInterfaceProp
         body: formData,
       });
 
+      console.log('Upload response status:', response.status);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Upload failed with status:', response.status, 'Error:', errorText);
+        setError(`Upload failed (${response.status}): ${errorText}`);
+        return;
+      }
+
       const result: UploadResponse = await response.json();
+      console.log('Upload result:', result);
 
       if (result.success) {
         onUploadSuccess(result);
       } else {
+        console.error('Upload unsuccessful:', result.error);
         setError(result.error || 'Upload failed');
       }
-          } catch {
-      setError('Network error during upload');
+    } catch (error) {
+      console.error('Network error during upload:', error);
+      setError(`Network error: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsUploading(false);
     }
