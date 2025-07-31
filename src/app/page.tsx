@@ -100,14 +100,14 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen relative">
+    <main className="min-h-screen relative flex justify-center items-center">
 
       <div className="container mx-auto px-4 py-8 relative z-10 light-frosting">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-black-900 mb-4">
             Dental Notes Comparison Tool
           </h1>
-          <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+          <p className="text-lg text-black-700 max-w-3xl mx-auto">
             Upload dental transcripts and multiple note versions to get AI-powered evaluations on 
             detail level, truthfulness, and accuracy. Compare notes side-by-side to identify 
             the best documentation practices.
@@ -121,7 +121,7 @@ export default function Home() {
         ) : (
           <div className="max-w-6xl mx-auto">
             <div className="mb-6 flex justify-between items-center">
-              <h2 className="text-2xl font-semibold text-gray-900">
+              <h2 className="text-2xl font-semibold text-black-900">
                 Evaluation Results
               </h2>
               <button
