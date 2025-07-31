@@ -133,7 +133,7 @@ export default function Home() {
             </div>
 
             {isEvaluating ? (
-              <div className="text-center py-12">
+              <div className="text-center py-12 frosted-glass">
                 <div className="inline-flex items-center">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mr-3"></div>
                   <span className="text-lg text-gray-700">
