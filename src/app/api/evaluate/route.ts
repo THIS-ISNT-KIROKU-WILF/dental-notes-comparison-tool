@@ -53,7 +53,9 @@ export async function POST(request: NextRequest) {
       transcriptName,
       noteFileName,
       results,
-      timestamp: new Date()
+      timestamp: new Date(),
+      noteContent: noteText,
+      transcriptContent: transcriptText
     };
 
     return NextResponse.json({
@@ -307,7 +309,9 @@ async function evaluateBatchInMemory(batchData: BatchData) {
             transcriptName,
             noteFileName: noteFile.name,
             results,
-            timestamp: new Date()
+            timestamp: new Date(),
+            noteContent: noteFile.content,
+            transcriptContent: transcriptContent
           };
           
           allEvaluations.push(evaluation);

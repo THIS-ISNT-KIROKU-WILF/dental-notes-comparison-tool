@@ -39,6 +39,8 @@ export interface Evaluation {
   noteFileName: string;
   results: EvaluationResults;
   timestamp: Date;
+  noteContent?: string; // The actual notes text
+  transcriptContent?: string; // The actual transcript text
 }
 
 export interface EvaluationResults {

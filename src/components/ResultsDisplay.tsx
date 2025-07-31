@@ -1,11 +1,77 @@
 'use client';
 
+import { useState } from 'react';
 import { UploadResponse, Evaluation } from '@/types';
 import BatchSummary from './BatchSummary';
 
 interface ResultsDisplayProps {
   uploadResult: UploadResponse;
   evaluations: Evaluation[];
+}
+
+function ContentToggle({ evaluation }: { evaluation: Evaluation }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  if (!evaluation.noteContent && !evaluation.transcriptContent) {
+    return null;
+  }
+
+  return (
+    <div className="mt-4 border-t pt-4">
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="flex items-center justify-between w-full p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+      >
+        <span className="font-medium text-gray-900">
+          View Original Content
+        </span>
+        <svg
+          className={`w-5 h-5 text-gray-600 transition-transform ${
+            isExpanded ? 'rotate-180' : ''
+          }`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      
+      {isExpanded && (
+        <div className="mt-4 space-y-4">
+          {evaluation.transcriptContent && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <h4 className="font-semibold text-blue-900 mb-2 flex items-center">
+                <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" clipRule="evenodd" />
+                  <path fillRule="evenodd" d="M4 5a2 2 0 012-2v1a1 1 0 001 1h6a1 1 0 001-1V3a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
+                </svg>
+                Original Transcript
+              </h4>
+              <div className="bg-white rounded p-3 text-sm text-gray-800 max-h-64 overflow-y-auto whitespace-pre-wrap">
+                {evaluation.transcriptContent}
+              </div>
+            </div>
+          )}
+          
+          {evaluation.noteContent && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <h4 className="font-semibold text-green-900 mb-2 flex items-center">
+                <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                  <path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" />
+                </svg>
+                Notes - {evaluation.noteFileName}
+              </h4>
+              <div className="bg-white rounded p-3 text-sm text-gray-800 max-h-64 overflow-y-auto whitespace-pre-wrap">
+                {evaluation.noteContent}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default function ResultsDisplay({ evaluations }: ResultsDisplayProps) {
