@@ -296,12 +296,19 @@ async function evaluateBatchInMemory(batchData: BatchData) {
       for (const noteFile of group.notes) {
         try {
           console.log(`Evaluating ${noteFile.name} for ${transcriptName}...`);
-          const evaluation = await evaluateDentalNotes(
-            transcriptContent,
-            noteFile.content,
-            noteFile.name,
-            transcriptName
-          );
+          const results = await evaluateDentalNotes({
+            transcript: transcriptContent,
+            notes: noteFile.content,
+            noteFileName: noteFile.name
+          });
+          
+          const evaluation: Evaluation = {
+            id: `eval_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            transcriptName,
+            noteFileName: noteFile.name,
+            results,
+            timestamp: new Date()
+          };
           
           allEvaluations.push(evaluation);
           console.log(`Completed evaluation for ${noteFile.name}, total evaluations: ${allEvaluations.length}`);
