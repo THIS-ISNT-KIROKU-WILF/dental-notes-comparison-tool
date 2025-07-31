@@ -179,7 +179,7 @@ export default function UploadInterface({ onUploadSuccess }: UploadInterfaceProp
     <div className="frosted-glass p-8">
       {/* Mode Selection */}
       <div className="mb-8">
-        <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg">
+        <div className="flex space-x-1 frosted-glass p-1 rounded-lg">
           <button
             onClick={() => setUploadMode('individual')}
             className={`flex-1 py-2 px-4 rounded-md font-medium transition-colors ${
