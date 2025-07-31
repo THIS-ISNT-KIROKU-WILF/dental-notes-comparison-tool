@@ -30,7 +30,7 @@ export async function evaluateDentalNotes({
         }
       ],
       temperature: 0.1, // Lower temperature for more consistent evaluations
-      max_tokens: 2000,
+      max_completion_tokens: 2000,
       response_format: { type: "json_object" }
     });
 
