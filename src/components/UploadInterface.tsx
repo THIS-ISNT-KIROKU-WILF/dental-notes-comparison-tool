@@ -12,6 +12,8 @@ export default function UploadInterface({ onUploadSuccess }: UploadInterfaceProp
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [transcriptFile, setTranscriptFile] = useState<File | null>(null);
+  const [noteFiles, setNoteFiles] = useState<File[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
