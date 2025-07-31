@@ -19,9 +19,9 @@ export async function POST(request: NextRequest) {
         const totalFiles = Object.values(body.batchData.structure).reduce((sum, group: any) => sum + group.notes.length, 0);
         console.log(`Total files to evaluate: ${totalFiles}`);
         
-        if (totalFiles > 10) {
+        if (totalFiles > 5) {
           // For large batches, process in smaller chunks
-          const batchResults = await evaluateBatchInChunks(body.batchData, 5); // Process 5 files at a time
+          const batchResults = await evaluateBatchInChunks(body.batchData, 3); // Process 3 files at a time
           return NextResponse.json({
             success: true,
             evaluations: batchResults
@@ -287,6 +287,103 @@ async function findNoteFiles(sessionDir: string): Promise<Array<{ name: string; 
       name: file,
       path: join(sessionDir, file)
     }));
+}
+
+// Chunked batch evaluation for large batches to avoid timeout
+async function evaluateBatchInChunks(batchData: BatchData, chunkSize: number = 5) {
+  try {
+    console.log('Starting chunked batch evaluation');
+    const allEvaluations: Evaluation[] = [];
+    const allTasks: Array<{ transcriptName: string; transcriptContent: string; noteFile: { name: string; content: string } }> = [];
+
+    // Collect all evaluation tasks
+    for (const [transcriptName, transcriptGroup] of Object.entries(batchData.structure)) {
+      const group = transcriptGroup as { transcript: { content: string } | null; notes: Array<{ name: string; content: string }> };
+      
+      if (!group.transcript) {
+        console.warn(`No transcript found for ${transcriptName}, skipping...`);
+        continue;
+      }
+
+      const transcriptContent = group.transcript.content;
+      
+      // Add each note evaluation task
+      for (const noteFile of group.notes) {
+        allTasks.push({
+          transcriptName,
+          transcriptContent,
+          noteFile
+        });
+      }
+    }
+
+    console.log(`Created ${allTasks.length} evaluation tasks, processing in chunks of ${chunkSize}`);
+
+    // Process tasks in chunks
+    for (let i = 0; i < allTasks.length; i += chunkSize) {
+      const chunk = allTasks.slice(i, i + chunkSize);
+      console.log(`Processing chunk ${Math.floor(i / chunkSize) + 1}/${Math.ceil(allTasks.length / chunkSize)}`);
+      
+      // Process chunk with reduced delay
+      for (const task of chunk) {
+        try {
+          console.log(`Evaluating ${task.noteFile.name} for ${task.transcriptName}...`);
+          const results = await evaluateDentalNotes({
+            transcript: task.transcriptContent,
+            notes: task.noteFile.content,
+            noteFileName: task.noteFile.name
+          });
+          
+          const evaluation: Evaluation = {
+            id: `eval_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            transcriptName: task.transcriptName,
+            noteFileName: task.noteFile.name,
+            results,
+            timestamp: new Date(),
+            noteContent: task.noteFile.content,
+            transcriptContent: task.transcriptContent
+          };
+          
+          allEvaluations.push(evaluation);
+          console.log(`Completed evaluation for ${task.noteFile.name}, total: ${allEvaluations.length}/${allTasks.length}`);
+          
+          // Minimal delay for faster processing while respecting rate limits
+          await new Promise(resolve => setTimeout(resolve, 200));
+        } catch (error) {
+          console.error(`Error evaluating ${task.noteFile.name} for ${task.transcriptName}:`, error);
+          continue;
+        }
+      }
+    }
+
+    // Rank evaluations within each transcript group
+    const evaluationsByTranscript = new Map<string, Evaluation[]>();
+    allEvaluations.forEach(evaluation => {
+      const key = evaluation.transcriptName;
+      if (!evaluationsByTranscript.has(key)) {
+        evaluationsByTranscript.set(key, []);
+      }
+      evaluationsByTranscript.get(key)!.push(evaluation);
+    });
+
+    // Apply rankings within each group
+    evaluationsByTranscript.forEach((evaluations) => {
+      const results = evaluations.map(e => e.results);
+      const rankedResults = rankEvaluations(results);
+      
+      evaluations.forEach((evaluation, index) => {
+        evaluation.results = rankedResults[index];
+      });
+    });
+
+    console.log(`Chunked batch evaluation completed with ${allEvaluations.length} total evaluations`);
+    return allEvaluations;
+  } catch (error) {
+    console.error('Chunked batch evaluation error:', error);
+    throw new Error('Failed to evaluate batch in chunks: ' + 
+      (error instanceof Error ? error.message : 'Unknown error')
+    );
+  }
 }
 
 // New function for in-memory batch evaluation
