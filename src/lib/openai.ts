@@ -18,7 +18,7 @@ export async function evaluateDentalNotes({
     const prompt = buildEvaluationPrompt(transcript, notes, noteFileName);
     
     const completion = await openai.chat.completions.create({
-      model: "gpt-o3", // Updated to use GPT-o3 as it is now available
+      model: "o3",
       messages: [
         {
           role: "system",
