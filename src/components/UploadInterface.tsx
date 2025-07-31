@@ -215,44 +215,91 @@ export default function UploadInterface({ onUploadSuccess }: UploadInterfaceProp
       {uploadMode === 'individual' ? (
         <div className="space-y-6">
           <div>
-            <h3 className="text-lg font-semibold mb-4">Upload Individual Files</h3>
+            <h3 className="text-lg font-medium mb-4">Individual Upload</h3>
             <p className="text-gray-700 mb-6">
-              Select one transcript file and multiple note versions for comparison.
+              Drop all files at once - we'll automatically detect the transcript and note files based on their names.
             </p>
-          </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-900 mb-2">
-              Transcript File
-            </label>
-            <input
-              ref={transcriptInputRef}
-              type="file"
-              accept=".txt,.md,.pdf,.docx"
-              className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-            />
-          </div>
+            {/* Drag and Drop Zone */}
+            <div
+              onDrop={(e) => handleIndividualDrop(e)}
+              onDragOver={(e) => e.preventDefault()}
+              onDragEnter={(e) => e.preventDefault()}
+              className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-gray-400 transition-colors cursor-pointer"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept=".txt,.md"
+                onChange={(e) => handleIndividualFileSelect(Array.from(e.target.files || []))}
+                className="hidden"
+              />
+              
+              <svg className="mx-auto h-12 w-12 text-gray-600" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              
+              <div className="mt-4">
+                <p className="text-lg text-gray-700 font-medium">Drop your files here, or click to browse</p>
+                <p className="text-gray-600 mt-2">
+                  Include one transcript file and multiple note files<br/>
+                  <span className="text-sm">Files with "transcript" in the name will be detected as transcripts</span>
+                </p>
+              </div>
+            </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-900 mb-2">
-              Note Files (select multiple)
-            </label>
-            <input
-              ref={notesInputRef}
-              type="file"
-              multiple
-              accept=".txt,.md,.pdf,.docx"
-              className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
-            />
-          </div>
+            {/* File Detection Results */}
+            {(transcriptFile || noteFiles.length > 0) && (
+              <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                <h4 className="font-medium text-gray-900 mb-3">Detected Files</h4>
+                
+                {transcriptFile && (
+                  <div className="mb-2">
+                    <div className="flex items-center text-sm">
+                      <svg className="w-4 h-4 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 0v12h8V4H6z" clipRule="evenodd" />
+                      </svg>
+                      <span className="font-medium text-blue-900">Transcript:</span>
+                      <span className="ml-2 text-gray-700">{transcriptFile.name}</span>
+                    </div>
+                  </div>
+                )}
 
-          <button
-            onClick={handleIndividualUpload}
-            disabled={isUploading}
-            className="w-full py-3 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {isUploading ? 'Uploading...' : 'Upload and Evaluate'}
-          </button>
+                {noteFiles.length > 0 && (
+                  <div>
+                    <div className="flex items-start text-sm">
+                      <svg className="w-4 h-4 text-green-600 mr-2 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                        <path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" />
+                      </svg>
+                      <div>
+                        <span className="font-medium text-green-900">Notes ({noteFiles.length}):</span>
+                        <div className="ml-0 mt-1 space-y-1">
+                          {noteFiles.map((file, index) => (
+                            <div key={index} className="text-gray-700 text-xs">• {file.name}</div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {(!transcriptFile && noteFiles.length === 0) && (
+                  <p className="text-gray-600 text-sm">No files detected yet</p>
+                )}
+              </div>
+            )}
+
+            <button
+              onClick={handleIndividualUpload}
+              disabled={!transcriptFile || noteFiles.length === 0 || isUploading}
+              className="mt-6 w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+            >
+              {isUploading ? 'Processing...' : `Evaluate ${noteFiles.length} Note${noteFiles.length !== 1 ? 's' : ''} Against Transcript`}
+            </button>
+          </div>
         </div>
       ) : (
         <div className="space-y-6">
