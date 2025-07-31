@@ -57,6 +57,7 @@ export async function POST(request: NextRequest) {
     const batchId = `batch_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     return NextResponse.json({
+      success: true,
       message: 'Batch ZIP uploaded and processed successfully',
       batchId,
       structure: extractedStructure,
