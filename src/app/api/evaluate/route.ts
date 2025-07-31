@@ -334,7 +334,13 @@ async function evaluateBatchInMemory(batchData: BatchData) {
 
     // Apply rankings within each group
     evaluationsByTranscript.forEach((evaluations) => {
-      rankEvaluations(evaluations);
+      const results = evaluations.map(e => e.results);
+      const rankedResults = rankEvaluations(results);
+      
+      // Update the evaluations with ranked results
+      evaluations.forEach((evaluation, index) => {
+        evaluation.results = rankedResults[index];
+      });
     });
 
     console.log(`Batch evaluation completed with ${allEvaluations.length} total evaluations`);
