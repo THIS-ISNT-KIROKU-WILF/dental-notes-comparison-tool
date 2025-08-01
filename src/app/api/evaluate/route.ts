@@ -22,27 +22,28 @@ export async function POST(request: NextRequest) {
         }, 0);
         console.log(`Total files to evaluate: ${totalFiles}`);
         
-        if (totalFiles > 30) {
-          // For very large batches, process only the first batch and return partial results
-          console.log(`Very large batch detected (${totalFiles} files). Processing first 15 files only.`);
-          const partialResults = await evaluatePartialBatch(body.batchData, 15);
+        if (totalFiles > 100) {
+          // For very large batches, use aggressive chunking but process ALL files
+          console.log(`Large batch detected (${totalFiles} files). Processing all files in chunks of 3.`);
+          const batchResults = await evaluateBatchInChunks(body.batchData, 3); // Process 3 files at a time with minimal delay
           return NextResponse.json({
             success: true,
-            evaluations: partialResults,
-            isPartial: true,
+            evaluations: batchResults,
             totalFiles,
-            processedFiles: partialResults.length,
-            message: `Processed first ${partialResults.length} of ${totalFiles} files due to size limits. Use individual upload for complete analysis.`
+            processedFiles: batchResults.length,
+            message: `Successfully processed all ${batchResults.length} files in chunks.`
           });
-        } else if (totalFiles > 3) {
-          // For medium batches, process in smaller chunks
-          const batchResults = await evaluateBatchInChunks(body.batchData, 2); // Process 2 files at a time
+        } else if (totalFiles > 15) {
+          // For medium-large batches, use moderate chunking for ALL files
+          console.log(`Medium batch detected (${totalFiles} files). Processing all files in chunks of 5.`);
+          const batchResults = await evaluateBatchInChunks(body.batchData, 5); // Process 5 files at a time
           return NextResponse.json({
             success: true,
             evaluations: batchResults
           });
         } else {
-          // For smaller batches, use the original method
+          // For smaller batches, process all files with original method
+          console.log(`Small batch detected (${totalFiles} files). Processing all files in memory.`);
           const batchResults = await evaluateBatchInMemory(body.batchData);
           return NextResponse.json({
             success: true,
@@ -352,7 +353,7 @@ async function evaluatePartialBatch(batchData: BatchData, maxFiles: number = 10)
           console.log(`Completed evaluation ${filesProcessed}/${maxFiles}`);
           
           // Minimal delay for rate limiting
-          await new Promise(resolve => setTimeout(resolve, 100));
+          await new Promise(resolve => setTimeout(resolve, 50));
         } catch (error) {
           console.error(`Error evaluating ${noteFile.name} for ${transcriptName}:`, error);
           continue;
@@ -449,7 +450,7 @@ async function evaluateBatchInChunks(batchData: BatchData, chunkSize: number = 5
           console.log(`Completed evaluation for ${task.noteFile.name}, total: ${allEvaluations.length}/${allTasks.length}`);
           
           // Minimal delay for faster processing while respecting rate limits
-          await new Promise(resolve => setTimeout(resolve, 100));
+          await new Promise(resolve => setTimeout(resolve, 50));
         } catch (error) {
           console.error(`Error evaluating ${task.noteFile.name} for ${task.transcriptName}:`, error);
           continue;
